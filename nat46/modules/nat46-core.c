@@ -1150,7 +1150,8 @@ static void nat46_fixup_icmp6_pkt_toobig(nat46_instance_t *nat46, struct ipv6hdr
 
   if (ntohs(*pmtu) > IPV6V4HDRDELTA) {
     icmp6h->icmp6_cksum = csum16_upd(old_csum, *pmtu, htons(ntohs(*pmtu) - IPV6V4HDRDELTA));
-    *pmtu = htons(ntohs(*pmtu) - IPV6V4HDRDELTA);
+    *pmtu = htons(ntohs(*pmtu) - IPV6V4ICMPFRAGDELTA);
+    printk("nat46: pmtu value ==== %d\n", *pmtu);
   }
 
   len = xlate_payload6_to4(nat46, (icmp6h + 1), get_next_header_ptr6((icmp6h + 1), len), len, &icmp6h->icmp6_cksum, ptailTruncSize);
